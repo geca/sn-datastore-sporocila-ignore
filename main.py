@@ -3,6 +3,7 @@
 import webapp2
 import jinja2
 import os
+from models import Sporocilo
 
 template_dir = os.path.join(os.path.dirname(__file__), "templates")
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), autoescape=False)
@@ -20,10 +21,23 @@ class VnosHandler(webapp2.RequestHandler):
 class RezultatHandler(webapp2.RequestHandler):
     def post(self):
         sporocilo = self.request.get("sporocilo")
+
+        sporocilo_db = Sporocilo(vnos=sporocilo)
+        sporocilo_db.put()
+
         return self.response.write(u"Vnesli ste sporočilo: %s" % sporocilo)
+
+class SeznamHandler(webapp2.RequestHandler):
+    def get(self):
+
+        sporocila = Sporocilo.query().fetch()
+
+        template = jinja_env.get_template("seznam.html")
+        return self.response.write(template.render({"sporocila": sporocila}))
 
 # URLs
 app = webapp2.WSGIApplication([
     webapp2.Route('/', VnosHandler),
-    webapp2.Route('/rezultat', RezultatHandler)
+    webapp2.Route('/rezultat', RezultatHandler),
+    webapp2.Route('/seznam', SeznamHandler)
 ], debug=True)
