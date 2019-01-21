@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sporočilo</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" integrity="sha384-PmY9l28YgO4JwMKbTvgaS7XNZJ30MK9FAZjjzXtlqyZCqBY6X6bXIkM++IkyinN+" crossorigin="anonymous">
+</head>
+<body>
+    <main class="container">
+       <p class="lead">
+        <p>Vsebina: {{ sporocilo.vnos }}</p>
+        <p>ID: {{ sporocilo.key.id() }}</p>
+        <p>Nastanek: {{ sporocilo.nastanek }}</p>
+       </p>
+    </main>
+</body>
+</html>

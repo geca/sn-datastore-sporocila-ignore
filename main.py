@@ -35,9 +35,24 @@ class SeznamHandler(webapp2.RequestHandler):
         template = jinja_env.get_template("seznam.html")
         return self.response.write(template.render({"sporocila": sporocila}))
 
+class PosameznoHandler(webapp2.RequestHandler):
+    def get(self, sporocilo_id):
+
+        sporocilo = Sporocilo.get_by_id(int(sporocilo_id))
+        template = jinja_env.get_template("sporocilo.html")
+        return self.response.write(template.render({"sporocilo": sporocilo}))
+
+class IzbrisiHandler(webapp2.RequestHandler):
+    def get(self, sporocilo_id):
+        sporocilo = Sporocilo.get_by_id(int(sporocilo_id))
+        sporocilo.key.delete()
+        self.redirect("/seznam")
+
 # URLs
 app = webapp2.WSGIApplication([
     webapp2.Route('/', VnosHandler),
     webapp2.Route('/rezultat', RezultatHandler),
-    webapp2.Route('/seznam', SeznamHandler)
+    webapp2.Route('/seznam', SeznamHandler),
+    webapp2.Route('/sporocilo/<sporocilo_id:\d+>', PosameznoHandler),
+    webapp2.Route('/sporocilo/<sporocilo_id:\d+>/izbrisi', IzbrisiHandler)
 ], debug=True)
